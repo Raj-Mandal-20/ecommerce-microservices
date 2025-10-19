@@ -13,3 +13,19 @@ services:
     image: mongo:5
     ports:
       - "27017:27017"
+
+  product-service:
+    build: "./services/product-service"
+    ports:
+      - "5050:5050"
+    env_file:
+      - ./services/product-service/.env
+    depends_on:
+      - productdb
+    volumes:
+      - ./shared/utils:/app/shared/utils
+
+  productdb:
+    image: mongo:5
+    ports:
+      - "27017"
