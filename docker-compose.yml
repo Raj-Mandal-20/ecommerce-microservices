@@ -1,0 +1,15 @@
+services:
+  user-service:
+    build: "./services/user-service"
+    ports:
+      - "3000:8080"
+    env_file:
+      - ./services/user-service/.env
+    depends_on:
+      - mongo
+    volumes:
+      - ./shared/utils:/app/shared/utils
+  mongo:
+    image: mongo:5
+    ports:
+      - "27017:27017"
