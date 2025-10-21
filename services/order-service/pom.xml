@@ -126,7 +126,6 @@
                     <execution>
                         <goals>
                             <goal>compile</goal>
-                            <goal>compile-custom</goal>
                         </goals>
                     </execution>
                 </executions>
