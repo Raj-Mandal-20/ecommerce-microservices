@@ -1,31 +1,72 @@
+version: "3.9"
+
 services:
+  # 🧑‍💻 User Service (Node.js)
   user-service:
-    build: "./services/user-service"
+    build: ./services/user-service
+    container_name: user-service
     ports:
       - "3000:8080"
     env_file:
       - ./services/user-service/.env
     depends_on:
-      - mongo
+      - user-mongo
     volumes:
       - ./shared/utils:/app/shared/utils
-  mongo:
-    image: mongo:5
-    ports:
-      - "27017:27017"
 
-  product-service:
-    build: "./services/product-service"
+  user-mongo:
+    image: mongo:7
+    container_name: user-mongo
     ports:
-      - "5050:5050"
+      - "27018:27017"
+    volumes:
+      - user_data:/data/db
+
+  # 📦 Product Service (Node.js + gRPC)
+  product-service:
+    build: ./services/product-service
+    container_name: product-service
+    ports:
+      - "5050:5050"   # REST API
+      - "50051:50051" # gRPC server
     env_file:
       - ./services/product-service/.env
+    environment:
+      - MONGO_URI=mongodb://product-mongo:27017/productdb
     depends_on:
-      - productdb
+      - product-mongo
     volumes:
       - ./shared/utils:/app/shared/utils
 
-  productdb:
-    image: mongo:5
+  product-mongo:
+    image: mongo:7
+    container_name: product-mongo
     ports:
-      - "27017"
+      - "27019:27017"
+    volumes:
+      - product_data:/data/db
+
+  # 🧾 Order Service (Java + Spring Boot + MongoDB)
+  order-service:
+    build: ./services/order-service
+    container_name: order-service
+    ports:
+      - "9090:9090"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://order-mongo:27017/orderdb
+    depends_on:
+      - order-mongo
+      - product-service   # ensure gRPC target is ready
+
+  order-mongo:
+    image: mongo:7
+    container_name: order-mongo
+    ports:
+      - "27020:27017"
+    volumes:
+      - order_data:/data/db
+
+volumes:
+  user_data:
+  product_data:
+  order_data:
