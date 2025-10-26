@@ -7,6 +7,7 @@ const path = require('path');
 const { default: mongoose } = require("mongoose");
 const productRoute = require('./routes/Product');
 const app = express();
+const  startGrpcServer  = require('./grpc/productServer');
 
 const uploadDir = 'images';
 if (!fs.existsSync(uploadDir)) {
@@ -61,6 +62,8 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
   const server = http.createServer(app);
   const PORT = process.env.PORT || 6565;
   console.log('DataBase Connected!');
+
+  startGrpcServer();
 
   server.listen(PORT, () => {
     console.log("Server is Running on PORT = "+PORT);

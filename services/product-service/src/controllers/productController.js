@@ -89,12 +89,24 @@ exports.deleteProduct = async (req, res, next) => {
             return next(new AppError('Product Not Found!', 404));
         }
 
-        await Product.deleteOne({_id : productId});
+        await Product.deleteOne({ _id: productId });
         res.status(200).json({
-            message : 'Product Deleted Successfully!'
+            message: 'Product Deleted Successfully!'
         })
     }
     catch (error) {
         next(error);
     }
 }
+exports.getProductById = async (productId) => {
+    const product = await Product.findById(productId);
+    if (!product) throw new Error('Product not found');
+
+    return {
+        product_id: product._id.toString(),
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        stock: product.stock
+    };
+};
