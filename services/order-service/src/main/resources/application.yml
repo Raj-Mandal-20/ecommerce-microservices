@@ -3,4 +3,15 @@ spring:
     name: order-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/orderdb
+      uri: mongodb://order-mongo:27017/orderdb
+
+grpc:
+  user-service:
+    host: user-service    # Docker Compose service name
+    port: 8080            # REST API port inside Docker network
+  product-service:
+    host: product-service # Docker Compose service name
+    port: 50051           # gRPC port
+
+server:
+  port: 8080              # Spring Boot internal port

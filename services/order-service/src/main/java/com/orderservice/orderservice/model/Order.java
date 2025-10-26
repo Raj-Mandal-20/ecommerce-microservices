@@ -20,28 +20,4 @@ public class Order {
     private double productPrice;
     private int quantity;
     private double totalAmount;
-
-    public void setUserId(String userId) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setProductName(String name) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setQuantity(int quantity) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setTotalAmount(double d) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setProductPrice(double price) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setProductId(String productId) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }
