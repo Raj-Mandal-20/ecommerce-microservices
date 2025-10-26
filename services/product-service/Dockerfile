@@ -2,12 +2,14 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY services/product-service/package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY services/product-service ./ 
 
-EXPOSE 5050
+COPY proto ./proto
+
+EXPOSE 5050 50051
 
 CMD ["npm", "run", "dev"]
