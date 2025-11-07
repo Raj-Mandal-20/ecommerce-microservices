@@ -68,7 +68,35 @@ services:
     volumes:
       - order_data:/data/db
 
+  inventory-service:
+    build:
+      context: ./services/inventory-service
+      dockerfile: Dockerfile
+    container_name: inventory-service
+    ports:
+      - "8081:8080"
+    depends_on:
+      - inventory-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://inventory-db:5432/inventory_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+  inventory-db:
+    image: postgres:15
+    container_name: inventory-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: inventory_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - inventory_db_data:/var/lib/postgresql/data
+    restart:  always
+
 volumes:
   user_data:
   product_data:
   order_data:
+  inventory_db_data:
