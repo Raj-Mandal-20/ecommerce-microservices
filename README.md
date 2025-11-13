@@ -38,7 +38,6 @@ ecommerce-backend/
 │
 ├── .vscode/                      # Editor configuration
 ├── proto/                        # Shared gRPC service definitions (.proto files)
-│   ├── user.proto
 │   ├── order.proto
 │   └── product.proto
 │
@@ -55,9 +54,7 @@ ecommerce-backend/
 │       └── AppError.js           # Common utility for consistent error handling
 │
 ├── docker-compose.yml            # Base orchestration (app + DB)
-├── docker-compose.kafka.yml      # Kafka & Zookeeper setup
 ├── .env                          # Environment variables for all services
-├── image.png                     # Architecture diagram
 ├── LICENSE
 └── README.md
 ```
