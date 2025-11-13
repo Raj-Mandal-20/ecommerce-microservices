@@ -64,9 +64,7 @@ ecommerce-backend/
 
 
 ## 🔄 Communication Overview
-### 🧭 REST (Synchronous)
-
-#### Used for CRUD and service-to-service API calls:
+### 🧭 REST (Synchronous) 
 
 - User → Order → Inventory
 
