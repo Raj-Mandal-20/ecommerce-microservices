@@ -6,6 +6,8 @@ import com.inventoryservice.inventory_service.exception.InsufficientStockExcepti
 import com.inventoryservice.inventory_service.exception.InventoryNotFoundException;
 import com.inventoryservice.inventory_service.model.Inventory;
 import com.inventoryservice.inventory_service.repository.InventoryRepository;
+import com.inventoryservice.inventory_service.kafka.KafkaProducer;
+
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +16,10 @@ import java.util.List;
 @Service
 public class InventoryService {
     private final InventoryRepository inventoryRepository;
-
-    public InventoryService(InventoryRepository inventoryRepository) {
+    private final KafkaProducer kafkaProducer;
+    public InventoryService(InventoryRepository inventoryRepository, KafkaProducer kafkaProducer) {
         this.inventoryRepository = inventoryRepository;
+        this.kafkaProducer = kafkaProducer;
     }
 
     public List<Inventory> getAll() {
@@ -34,7 +37,13 @@ public class InventoryService {
                 .orElse(Inventory.builder().productId(productId).quantity(0).build());
 
         inv.setQuantity(inv.getQuantity() + quantity);
-        return inventoryRepository.save(inv);
+        Inventory saved = inventoryRepository.save(inv);
+
+        kafkaProducer.sendInventoryUpdate(
+            "Stock added for " + productId + ": +" + quantity
+        );
+
+        return saved;
     }
 
     @Transactional
